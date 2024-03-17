@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: camunda-app
+
+camunda:
+  bpm:
+    admin-user:
+      id: admin
+      password: admin
