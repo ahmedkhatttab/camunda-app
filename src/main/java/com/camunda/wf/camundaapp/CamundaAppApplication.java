@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -23,5 +25,11 @@ public class CamundaAppApplication implements CommandLineRunner {
 		user1.setUsername("ahmedkhatab");
 		user1.setPassword("1234");
 		userRepo.save(user1);
+	}
+
+
+	@Bean
+	public RestTemplate restTemplate(){
+		return new RestTemplate();
 	}
 }

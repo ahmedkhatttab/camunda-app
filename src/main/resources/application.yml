@@ -7,3 +7,6 @@ camunda:
     admin-user:
       id: admin
       password: admin
+
+
+camunda-base-url: http://localhost:8080/engine-rest
