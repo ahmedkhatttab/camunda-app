@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class PayloadDTO {
+public class CamundaPayloadWrapper {
 
     @JsonProperty("variables")
     private Map<String, VariableDTO> variables;

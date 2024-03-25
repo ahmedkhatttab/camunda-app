@@ -1,7 +1,11 @@
 package com.camunda.wf.camundaapp.dto.camunda;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class VariableDTO {
 
     @JsonProperty("value")
@@ -9,22 +13,4 @@ public class VariableDTO {
 
     @JsonProperty("type")
     private String type;
-
-    // Getters and setters
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

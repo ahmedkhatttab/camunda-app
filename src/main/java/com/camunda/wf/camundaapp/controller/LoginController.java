@@ -1,6 +1,7 @@
 package com.camunda.wf.camundaapp.controller;
 
-import com.camunda.wf.camundaapp.dto.camunda.PayloadDTO;
+import com.camunda.wf.camundaapp.clients.CamundaClient;
+import com.camunda.wf.camundaapp.dto.camunda.CamundaPayloadWrapper;
 import com.camunda.wf.camundaapp.dto.camunda.VariableDTO;
 import com.camunda.wf.camundaapp.model.Product;
 import com.camunda.wf.camundaapp.model.User;
@@ -14,13 +15,11 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -38,6 +37,7 @@ public class LoginController {
     private final ProductRepo productRepo;
 
     private final RestTemplate restTemplate;
+    private final CamundaClient camundaClient;
 
     @PostMapping("/login")
     ResponseEntity<String> login(@RequestBody @Valid User user){
@@ -53,22 +53,15 @@ public class LoginController {
     @GetMapping("/products")
     public ResponseEntity<JsonNode> createProduct(){
 
-        PayloadDTO payloadDTO = new PayloadDTO();
-        payloadDTO.setBusinessKey(UUID.randomUUID().toString());
+        CamundaPayloadWrapper camundaPayloadWrapper = new CamundaPayloadWrapper();
+//        payloadDTO.setBusinessKey(UUID.randomUUID().toString());
 
         // start process and get processInstanceId
-        JsonNode res = restTemplate.postForObject(camundaBaseUrl+"/process-definition/key/{key}/start", payloadDTO,
-                JsonNode.class,
-                "login_process");
-
+        JsonNode res = camundaClient.startProcessByKey("login_process", null);
         String processInstanceId = res.get("id").asText();
 
         // get TaskID
-        Map<String, String> queryParam = new HashMap<>();
-        queryParam.put("processInstanceId", processInstanceId);
-        res = restTemplate.getForObject(camundaBaseUrl+"/task?processInstanceId={processInstanceId}", JsonNode.class,
-                processInstanceId);
-//        res = restTemplate.getForObject(camundaBaseUrl+"/task?processInstanceId="+processInstanceId, JsonNode.class);
+        res = camundaClient.getTaskIdByProcessInstanceId(processInstanceId);
         String taskId = res.get(0).get("id").asText();
 
         // add variables to execution scope
@@ -76,13 +69,13 @@ public class LoginController {
         VariableDTO prod1 = new VariableDTO();
         prod1.setValue(new Product(1L, "CAR WASHER", 20.0));
         body.put("product", prod1);
-        payloadDTO.setVariables(body);
+        camundaPayloadWrapper.setVariables(body);
 
         // add execution variables to response payload
-        payloadDTO.setWithVariablesInReturn(true);
+        camundaPayloadWrapper.setWithVariablesInReturn(true);
 
         // complete task
-        res = restTemplate.postForObject(camundaBaseUrl + "/task/{id}/complete", payloadDTO, JsonNode.class, taskId);
+        res = restTemplate.postForObject(camundaBaseUrl + "/task/{id}/complete", camundaPayloadWrapper, JsonNode.class, taskId);
 
         return ResponseEntity.ok(res);
     }
