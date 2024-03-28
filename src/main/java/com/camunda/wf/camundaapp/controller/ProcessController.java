@@ -8,6 +8,7 @@ import com.camunda.wf.camundaapp.dto.camunda.response.TaskDto;
 import com.camunda.wf.camundaapp.model.Product;
 import com.camunda.wf.camundaapp.repo.ProductRepo;
 import com.camunda.wf.camundaapp.service.UserService;
+import com.camunda.wf.camundaapp.service.utils.CamundaUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
@@ -53,11 +54,9 @@ public class ProcessController {
 
         // add variables to execution scope
         TaskRequestDto taskRequestDto = new TaskRequestDto();
-        Map<String, VariableDTO> body = new HashMap<>();
-        VariableDTO prod1 = new VariableDTO();
-        prod1.setValue(new Product(1L, "CAR WASHER", 20.0));
-        body.put("product", prod1);
-        taskRequestDto.setVariables(body);
+        Product product = new Product(1L, "CAR WASHER", 20.0);
+        Map<String, VariableDTO> variables = CamundaUtils.addToExecutionScope("product", product);
+        taskRequestDto.setVariables(variables);
 
         // add execution variables to response payload
         taskRequestDto.setWithVariablesInReturn(true);
