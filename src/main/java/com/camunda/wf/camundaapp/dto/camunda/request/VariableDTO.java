@@ -1,4 +1,4 @@
-package com.camunda.wf.camundaapp.dto.camunda;
+package com.camunda.wf.camundaapp.dto.camunda.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
