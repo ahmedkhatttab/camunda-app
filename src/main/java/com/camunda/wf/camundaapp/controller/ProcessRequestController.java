@@ -5,9 +5,11 @@ import com.camunda.wf.camundaapp.camunda.dto.response.ProcessInstanceDto;
 import com.camunda.wf.camundaapp.camunda.dto.response.TaskDto;
 import com.camunda.wf.camundaapp.clients.CamundaClient;
 import com.camunda.wf.camundaapp.model.OrderRequest;
+import com.camunda.wf.camundaapp.repo.OrderRequestRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,9 +25,15 @@ public class ProcessRequestController {
 
     private final CamundaClient camundaClient;
 
+    private final OrderRequestRepo repo;
+
 
     @PostMapping
+    @Transactional
     public ResponseEntity<String> createProduct(@RequestBody @Valid OrderRequest request){
+
+        repo.save(request);
+
         String processDefKey = "request_process";
 
         // start process and get processInstanceId
