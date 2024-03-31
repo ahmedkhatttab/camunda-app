@@ -1,4 +1,4 @@
-package com.camunda.wf.camundaapp.dto.camunda.request;
+package com.camunda.wf.camundaapp.camunda.dto.request;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

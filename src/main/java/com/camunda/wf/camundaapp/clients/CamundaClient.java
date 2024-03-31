@@ -1,16 +1,16 @@
 package com.camunda.wf.camundaapp.clients;
 
 
-import com.camunda.wf.camundaapp.dto.camunda.request.TaskRequestDto;
-import com.camunda.wf.camundaapp.dto.camunda.response.ProcessInstanceDto;
-import com.camunda.wf.camundaapp.dto.camunda.response.TaskDto;
+import com.camunda.wf.camundaapp.camunda.dto.request.ProcessInstanceRequestDto;
+import com.camunda.wf.camundaapp.camunda.dto.request.TaskRequestDto;
+import com.camunda.wf.camundaapp.camunda.dto.response.ProcessInstanceDto;
+import com.camunda.wf.camundaapp.camunda.dto.response.TaskDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,11 +26,13 @@ public class CamundaClient {
     private final RestTemplate restTemplate;
 
 
-    public ProcessInstanceDto startProcessByKey(String processDefKey, String businessKey){
-        businessKey = (StringUtils.isBlank(businessKey) ? UUID.randomUUID().toString(): businessKey);
-        return restTemplate.postForObject(
+    public ProcessInstanceDto startProcessByKey(String processDefKey, ProcessInstanceRequestDto dto){
+
+        HttpEntity<ProcessInstanceRequestDto> requestEntity = new HttpEntity<>(dto, getHttpHeaders());
+
+        return restTemplate.exchange(
                 camundaBaseUrl+"/process-definition/key/{key}/start",
-                businessKey, ProcessInstanceDto.class,processDefKey);
+                HttpMethod.POST, requestEntity, ProcessInstanceDto.class, processDefKey).getBody();
     }
 
     public TaskDto getTaskIdByProcessInstanceId(String processInstanceId){
@@ -43,6 +45,16 @@ public class CamundaClient {
     }
 
     public void completeTask(String taskId, TaskRequestDto payload){
-        restTemplate.postForObject(camundaBaseUrl + "/task/{id}/complete", payload, JsonNode.class, taskId);
+        HttpEntity<TaskRequestDto> requestEntity = new HttpEntity<>(payload, getHttpHeaders());
+
+        restTemplate.exchange(camundaBaseUrl + "/task/{id}/complete",
+                HttpMethod.POST, requestEntity, Void.class, JsonNode.class, taskId);
+    }
+
+
+    private HttpHeaders getHttpHeaders(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 }

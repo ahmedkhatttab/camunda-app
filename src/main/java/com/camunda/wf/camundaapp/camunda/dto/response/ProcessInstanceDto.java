@@ -1,4 +1,4 @@
-package com.camunda.wf.camundaapp.dto.camunda.response;
+package com.camunda.wf.camundaapp.camunda.dto.response;
 
 import lombok.Data;
 
