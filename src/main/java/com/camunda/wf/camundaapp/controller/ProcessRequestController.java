@@ -32,8 +32,6 @@ public class ProcessRequestController {
     @Transactional
     public ResponseEntity<String> createProduct(@RequestBody @Valid OrderRequest request){
 
-        repo.save(request);
-
         String processDefKey = "request_process";
 
         // start process and get processInstanceId
@@ -41,6 +39,10 @@ public class ProcessRequestController {
         instanceRequestDto.setBusinessKey(UUID.randomUUID().toString());
         ProcessInstanceDto processInstance = camundaClient.startProcessByKey(processDefKey, instanceRequestDto);
         String processInstanceId = processInstance.getId();
+
+        // save entity
+        request.setProcessInstanceId(processInstanceId);
+        repo.save(request);
 
         // get TaskID
         TaskDto taskDto = camundaClient.getTaskIdByProcessInstanceId(processInstanceId);
