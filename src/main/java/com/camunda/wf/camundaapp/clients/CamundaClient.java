@@ -48,7 +48,7 @@ public class CamundaClient {
         HttpEntity<TaskRequestDto> requestEntity = new HttpEntity<>(payload, getHttpHeaders());
 
         restTemplate.exchange(camundaBaseUrl + "/task/{id}/complete",
-                HttpMethod.POST, requestEntity, Void.class, JsonNode.class, taskId);
+                HttpMethod.POST, requestEntity, Void.class, taskId);
     }
 
 
