@@ -18,7 +18,7 @@ public class RequestStatusService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        log.debug("-------------------- CHANGE REQUEST STATUS --------------------");
+        log.info("-------------------- CHANGE REQUEST STATUS --------------------");
         OrderRequest orderRequest = (OrderRequest) execution.getVariable("order");
         String requiredStatus = (String) execution.getVariable("req_status");
         orderRequest.setStatus(ERequestStatus.valueOf(requiredStatus));

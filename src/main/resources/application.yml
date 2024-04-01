@@ -2,6 +2,17 @@ spring:
   application:
     name: camunda-app
 
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
 camunda:
   bpm:
     admin-user:
@@ -10,3 +21,13 @@ camunda:
 
 
 camunda-base-url: http://localhost:8080/engine-rest
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

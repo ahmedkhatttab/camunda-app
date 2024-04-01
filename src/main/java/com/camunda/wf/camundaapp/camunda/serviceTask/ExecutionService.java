@@ -18,10 +18,10 @@ public class ExecutionService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        log.debug("-------------------- ADD TO EXECUTION --------------------");
+        log.info("-------------------- ADD TO EXECUTION --------------------");
         String processInstanceId = execution.getProcessInstanceId();
         OrderRequest orderRequest = orderRepo.findByProcessInstanceId(processInstanceId).get();
-        log.debug("{}", orderRequest);
+        log.info("{}", orderRequest);
         execution.setVariable("order", orderRequest);
     }
 }
