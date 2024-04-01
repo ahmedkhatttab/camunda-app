@@ -35,11 +35,20 @@ public class CamundaClient {
                 HttpMethod.POST, requestEntity, ProcessInstanceDto.class, processDefKey).getBody();
     }
 
-    public TaskDto getTaskIdByProcessInstanceId(String processInstanceId){
+    public TaskDto getTaskByProcessInstanceId(String processInstanceId){
         ResponseEntity<List<TaskDto>> taskList =
                 restTemplate.exchange(camundaBaseUrl + "/task?processInstanceId={processInstanceId}",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskDto>>() {
                 }, processInstanceId);
+
+        return taskList.getBody().get(0);
+    }
+
+    public TaskDto getTaskByBusinessKey(String businessKey){
+        ResponseEntity<List<TaskDto>> taskList =
+                restTemplate.exchange(camundaBaseUrl + "/task?businessKey={businessKey}",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskDto>>() {
+                        }, businessKey);
 
         return taskList.getBody().get(0);
     }

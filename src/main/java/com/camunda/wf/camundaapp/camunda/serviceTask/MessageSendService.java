@@ -26,6 +26,7 @@ public class MessageSendService implements JavaDelegate {
                 mcb.setVariable(k.getKey(), k.getValue());
             }
         });
-        mcb.correlate();
+        mcb.processInstanceBusinessKey(execution.getProcessBusinessKey()).correlateWithResult();
+//                .getExecution().getProcessInstanceId();
     }
 }

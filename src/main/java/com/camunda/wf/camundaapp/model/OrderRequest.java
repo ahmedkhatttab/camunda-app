@@ -36,6 +36,9 @@ public class OrderRequest {
     @Column(name = "process_instance_id", nullable = false)
     private String processInstanceId;
 
+    @Column(name = "business_key")
+    private String businessKey;
+
     @Column(name = "request_status")
     private ERequestStatus status;
 }
