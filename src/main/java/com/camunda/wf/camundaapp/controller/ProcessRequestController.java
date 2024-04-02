@@ -1,12 +1,16 @@
 package com.camunda.wf.camundaapp.controller;
 
 import com.camunda.wf.camundaapp.camunda.dto.request.ProcessInstanceRequestDto;
+import com.camunda.wf.camundaapp.camunda.dto.request.TaskRequestDto;
+import com.camunda.wf.camundaapp.camunda.dto.request.VariableDTO;
 import com.camunda.wf.camundaapp.camunda.dto.response.ProcessInstanceDto;
 import com.camunda.wf.camundaapp.camunda.dto.response.TaskDto;
 import com.camunda.wf.camundaapp.clients.CamundaClient;
 import com.camunda.wf.camundaapp.model.OrderRequest;
+import com.camunda.wf.camundaapp.model.constant.AdminDecision;
 import com.camunda.wf.camundaapp.model.constant.ERequestStatus;
 import com.camunda.wf.camundaapp.repo.OrderRequestRepo;
+import com.camunda.wf.camundaapp.service.utils.CamundaUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,7 +37,7 @@ public class ProcessRequestController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> createProduct(@RequestBody @Valid OrderRequest request){
+    public ResponseEntity<String> createRequest(@RequestBody @Valid OrderRequest request){
 
         String processDefKey = "request_process";
 
@@ -60,7 +65,7 @@ public class ProcessRequestController {
 
     @PutMapping("/admin/review/{processInstanceId}")
     @Transactional
-    public ResponseEntity<String> createProduct(@PathVariable String processInstanceId){
+    public ResponseEntity<String> reviewRequest(@PathVariable String processInstanceId){
 
         Optional<OrderRequest> orderRequest = repo.findByProcessInstanceId(processInstanceId);
         if(orderRequest.isEmpty()){
@@ -71,8 +76,38 @@ public class ProcessRequestController {
         }
 
         // get TaskID
+        TaskDto taskDto = camundaClient.getTaskByBusinessKey(orderRequest.get().getBusinessKey());
+        String taskId = taskDto.getId();
+
+        // complete task
+        camundaClient.completeTask(taskId, null);
+
+        return ResponseEntity.ok("Success");
+    }
+
+
+    @PutMapping("/admin/decision/{processInstanceId}")
+    @Transactional
+    public ResponseEntity<String> takeDecision(@PathVariable String processInstanceId,
+                                               @RequestParam AdminDecision decision){
+
+        Optional<OrderRequest> orderRequest = repo.findByProcessInstanceId(processInstanceId);
+        if(orderRequest.isEmpty()){
+            throw new RuntimeException("Request Not Found");
+        }
+        else if(orderRequest.get().getStatus()!= ERequestStatus.REQUEST_UNDER_REVIEW){
+            throw new RuntimeException("Invalid Request Status");
+        }
+
+        // get TaskID
         TaskDto taskDto = camundaClient.getTaskByBusinessKey(processInstanceId);
         String taskId = taskDto.getId();
+
+        Map<String, VariableDTO> execVars = null;
+        execVars = CamundaUtils.addToExecutionScope("adminDecision", decision);
+
+        TaskRequestDto taskRequestDto = new TaskRequestDto();
+        taskRequestDto.setVariables(execVars);
 
         // complete task
         camundaClient.completeTask(taskId, null);

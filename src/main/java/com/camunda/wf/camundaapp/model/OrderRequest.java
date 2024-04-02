@@ -27,7 +27,7 @@ public class OrderRequest {
 
     @Min(0)
     @Column(name = "price", nullable = false)
-    private String price;
+    private Long price;
 
     @NotNull
     @Column(name = "type", nullable = false)

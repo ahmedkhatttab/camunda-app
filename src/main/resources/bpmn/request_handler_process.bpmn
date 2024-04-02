@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1vdlimg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.14.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1vdlimg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.14.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="request_handler_process" name="request_handler_process" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="receiveRequests" name="Receive Requests">
       <bpmn:outgoing>Flow_17wd0au</bpmn:outgoing>
@@ -36,8 +36,12 @@
       <bpmn:outgoing>Flow_1l1hpm0</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0zat9jg" sourceRef="adminDecision" targetRef="Gateway_1rp6665" />
-    <bpmn:sequenceFlow id="Flow_1aplopg" name="Approve" sourceRef="Gateway_1rp6665" targetRef="Activity_1uhud84" />
-    <bpmn:sequenceFlow id="Flow_1l1hpm0" name="Reject" sourceRef="Gateway_1rp6665" targetRef="Activity_0go6l9z" />
+    <bpmn:sequenceFlow id="Flow_1aplopg" name="Approve" sourceRef="Gateway_1rp6665" targetRef="Activity_1uhud84">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${adminDecision=="APPROVE"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1l1hpm0" name="Reject" sourceRef="Gateway_1rp6665" targetRef="Activity_0go6l9z">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${adminDecision=="REJECT"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_0bjvu0v">
       <bpmn:incoming>Flow_1so50r3</bpmn:incoming>
       <bpmn:incoming>Flow_0ohu7gp</bpmn:incoming>
@@ -133,7 +137,7 @@
         <di:waypoint x="770" y="120" />
         <di:waypoint x="860" y="120" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="790" y="103" width="40" height="14" />
+          <dc:Bounds x="791" y="103" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1l1hpm0_di" bpmnElement="Flow_1l1hpm0">
@@ -141,7 +145,7 @@
         <di:waypoint x="770" y="360" />
         <di:waypoint x="860" y="360" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="803" y="363" width="33" height="14" />
+          <dc:Bounds x="804" y="363" width="33" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1so50r3_di" bpmnElement="Flow_1so50r3">

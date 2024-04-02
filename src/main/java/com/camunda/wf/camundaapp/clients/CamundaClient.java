@@ -46,7 +46,7 @@ public class CamundaClient {
 
     public TaskDto getTaskByBusinessKey(String businessKey){
         ResponseEntity<List<TaskDto>> taskList =
-                restTemplate.exchange(camundaBaseUrl + "/task?businessKey={businessKey}",
+                restTemplate.exchange(camundaBaseUrl + "/task?processInstanceBusinessKey={businessKey}",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskDto>>() {
                         }, businessKey);
 

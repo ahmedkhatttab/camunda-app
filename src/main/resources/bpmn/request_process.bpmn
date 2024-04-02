@@ -30,8 +30,8 @@
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="messageName">Message_send_to_admin</camunda:inputParameter>
-          <camunda:inputParameter name="price">${order.price}</camunda:inputParameter>
-          <camunda:inputParameter name="type">${order.type}</camunda:inputParameter>
+          <camunda:inputParameter name="order">${order}</camunda:inputParameter>
+          <camunda:inputParameter name="busninessKey">${execution.getBusinessKey()}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1y83rj4</bpmn:incoming>
@@ -95,7 +95,7 @@ ${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelat
     <bpmn:association id="Association_06uhzy8" sourceRef="Event_0dtlphs" targetRef="TextAnnotation_0xlw6a8" />
     <bpmn:textAnnotation id="TextAnnotation_1g168wh">
       <bpmn:text>The name of this message and the MessageStartEvent does not need to be the same
-e just need to pass the name of MessageStartEvent to createMessageCorrelation()</bpmn:text>
+We just need to pass the name of MessageStartEvent to createMessageCorrelation()</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1tirtic" sourceRef="sendToAdmin" targetRef="TextAnnotation_1g168wh" />
   </bpmn:process>
@@ -105,18 +105,6 @@ e just need to pass the name of MessageStartEvent to createMessageCorrelation()<
   <bpmn:message id="Message_35913f2" name="Message_Rejected" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="request_process">
-      <bpmndi:BPMNShape id="TextAnnotation_15uqu9g_di" bpmnElement="TextAnnotation_15uqu9g">
-        <dc:Bounds x="730" y="80" width="584" height="84" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0xlw6a8_di" bpmnElement="TextAnnotation_0xlw6a8">
-        <dc:Bounds x="330" y="62" width="280" height="48" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1g168wh_di" bpmnElement="TextAnnotation_1g168wh">
-        <dc:Bounds x="610" y="290" width="350" height="70" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="209" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -171,18 +159,18 @@ e just need to pass the name of MessageStartEvent to createMessageCorrelation()<
       <bpmndi:BPMNShape id="Event_0nc6cne_di" bpmnElement="Event_0nc6cne">
         <dc:Bounds x="1452" y="209" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0gg0khz_di" bpmnElement="Association_0gg0khz">
-        <di:waypoint x="860" y="212" />
-        <di:waypoint x="827" y="164" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_06uhzy8_di" bpmnElement="Association_06uhzy8">
-        <di:waypoint x="442" y="211" />
-        <di:waypoint x="395" y="110" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1tirtic_di" bpmnElement="Association_1tirtic">
-        <di:waypoint x="853" y="233" />
-        <di:waypoint x="700" y="290" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_15uqu9g_di" bpmnElement="TextAnnotation_15uqu9g">
+        <dc:Bounds x="730" y="80" width="584" height="84" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0xlw6a8_di" bpmnElement="TextAnnotation_0xlw6a8">
+        <dc:Bounds x="330" y="62" width="280" height="48" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1g168wh_di" bpmnElement="TextAnnotation_1g168wh">
+        <dc:Bounds x="610" y="290" width="350" height="70" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1bwewgb_di" bpmnElement="Flow_1bwewgb">
         <di:waypoint x="215" y="227" />
         <di:waypoint x="270" y="227" />
@@ -210,11 +198,17 @@ e just need to pass the name of MessageStartEvent to createMessageCorrelation()<
       <bpmndi:BPMNEdge id="Flow_1jb10g3_di" bpmnElement="Flow_1jb10g3">
         <di:waypoint x="1005" y="227" />
         <di:waypoint x="1072" y="227" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1019" y="209" width="40" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1mu0r3a_di" bpmnElement="Flow_1mu0r3a">
         <di:waypoint x="980" y="252" />
         <di:waypoint x="980" y="340" />
         <di:waypoint x="1072" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1008" y="318" width="28" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0v72kiz_di" bpmnElement="Flow_0v72kiz">
         <di:waypoint x="1108" y="227" />
@@ -232,6 +226,18 @@ e just need to pass the name of MessageStartEvent to createMessageCorrelation()<
       <bpmndi:BPMNEdge id="Flow_090tbx7_di" bpmnElement="Flow_090tbx7">
         <di:waypoint x="1380" y="227" />
         <di:waypoint x="1452" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0gg0khz_di" bpmnElement="Association_0gg0khz">
+        <di:waypoint x="860" y="212" />
+        <di:waypoint x="827" y="164" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_06uhzy8_di" bpmnElement="Association_06uhzy8">
+        <di:waypoint x="442" y="211" />
+        <di:waypoint x="395" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1tirtic_di" bpmnElement="Association_1tirtic">
+        <di:waypoint x="853" y="233" />
+        <di:waypoint x="785" y="258" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
