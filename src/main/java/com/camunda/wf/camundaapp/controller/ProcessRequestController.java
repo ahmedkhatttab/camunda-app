@@ -100,7 +100,7 @@ public class ProcessRequestController {
         }
 
         // get TaskID
-        TaskDto taskDto = camundaClient.getTaskByBusinessKey(processInstanceId);
+        TaskDto taskDto = camundaClient.getTaskByBusinessKey(orderRequest.get().getBusinessKey());
         String taskId = taskDto.getId();
 
         Map<String, VariableDTO> execVars = null;
@@ -110,7 +110,7 @@ public class ProcessRequestController {
         taskRequestDto.setVariables(execVars);
 
         // complete task
-        camundaClient.completeTask(taskId, null);
+        camundaClient.completeTask(taskId, taskRequestDto);
 
         return ResponseEntity.ok("Success");
     }

@@ -53,7 +53,7 @@
     <bpmn:endEvent id="Event_0zvy59o">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="messageName">${decision.equals("approved") ? "Message_Approved" : "Message_Rejected" }</camunda:inputParameter>
+          <camunda:inputParameter name="messageName">${adminDecision.equalsIgnoreCase("approve") ? "Message_Approved" : "Message_Rejected" }</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_15dpwav</bpmn:incoming>
@@ -77,12 +77,20 @@
       <bpmn:incoming>Flow_1l1hpm0</bpmn:incoming>
       <bpmn:outgoing>Flow_0ohu7gp</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:textAnnotation id="TextAnnotation_08znwka">
+      <bpmn:text>represents actions which admin can do: accept, reject, etc...</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1b6d7y4" sourceRef="adminDecision" targetRef="TextAnnotation_08znwka" />
   </bpmn:process>
   <bpmn:message id="Message_3dg3i7e" name="Message_send_to_admin" />
   <bpmn:message id="Message_2fk9uvk" name="Message_2fk9uvk" />
   <bpmn:message id="Message_2ge4uql" name="Message_2ge4uql" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="request_handler_process">
+      <bpmndi:BPMNShape id="TextAnnotation_08znwka_di" bpmnElement="TextAnnotation_08znwka">
+        <dc:Bounds x="420" y="320" width="260" height="41" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ja7g3z_di" bpmnElement="receiveRequests">
         <dc:Bounds x="172" y="232" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -116,6 +124,10 @@
       <bpmndi:BPMNShape id="Activity_0y7pgv0_di" bpmnElement="Activity_0go6l9z">
         <dc:Bounds x="860" y="320" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1b6d7y4_di" bpmnElement="Association_1b6d7y4">
+        <di:waypoint x="630" y="290" />
+        <di:waypoint x="630" y="320" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17wd0au_di" bpmnElement="Flow_17wd0au">
         <di:waypoint x="208" y="250" />
         <di:waypoint x="260" y="250" />

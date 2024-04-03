@@ -98,6 +98,10 @@ ${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelat
 We just need to pass the name of MessageStartEvent to createMessageCorrelation()</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1tirtic" sourceRef="sendToAdmin" targetRef="TextAnnotation_1g168wh" />
+    <bpmn:textAnnotation id="TextAnnotation_0qbhthi">
+      <bpmn:text>Note: we have no access to processInstance Info</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0wmbwni" sourceRef="sendRequest" targetRef="TextAnnotation_0qbhthi" />
   </bpmn:process>
   <bpmn:message id="Message_1mgdbmr" name="Message_send_to_admin2" />
   <bpmn:message id="Message_1gbsvm1" name="Message_1gbsvm1" />
@@ -105,6 +109,10 @@ We just need to pass the name of MessageStartEvent to createMessageCorrelation()
   <bpmn:message id="Message_35913f2" name="Message_Rejected" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="request_process">
+      <bpmndi:BPMNShape id="TextAnnotation_0qbhthi_di" bpmnElement="TextAnnotation_0qbhthi">
+        <dc:Bounds x="170" y="290" width="320" height="32" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="209" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -171,6 +179,10 @@ We just need to pass the name of MessageStartEvent to createMessageCorrelation()
         <dc:Bounds x="610" y="290" width="350" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0wmbwni_di" bpmnElement="Association_0wmbwni">
+        <di:waypoint x="310" y="267" />
+        <di:waypoint x="304" y="290" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1bwewgb_di" bpmnElement="Flow_1bwewgb">
         <di:waypoint x="215" y="227" />
         <di:waypoint x="270" y="227" />
