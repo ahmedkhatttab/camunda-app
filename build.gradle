@@ -39,6 +39,7 @@ dependencies {
 	implementation group: 'org.camunda.connect', name: 'camunda-connect-core'
 	implementation group: 'org.camunda.connect', name: 'camunda-connect-http-client'
 	implementation group: 'org.camunda.bpm', name: 'camunda-engine-plugin-connect'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	compileOnly 'org.projectlombok:lombok'

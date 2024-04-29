@@ -14,6 +14,7 @@ import com.camunda.wf.camundaapp.service.utils.CamundaUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class ProcessRequestController {
 
     @PostMapping
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> createRequest(@RequestBody @Valid OrderRequest request){
 
         String processDefKey = "request_process";
@@ -65,6 +67,7 @@ public class ProcessRequestController {
 
     @PutMapping("/admin/review/{processInstanceId}")
     @Transactional
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<String> reviewRequest(@PathVariable String processInstanceId){
 
         Optional<OrderRequest> orderRequest = repo.findByProcessInstanceId(processInstanceId);

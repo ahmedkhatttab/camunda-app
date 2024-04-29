@@ -2,6 +2,20 @@ spring:
   application:
     name: camunda-app
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/auth/realms/camunda-app
+          jwk-set-uri: http://localhost:8082/auth/realms/camunda-app/protocol/openid-connect/certs
+
+
+  jwt:
+    auth:
+      converter:
+        resource-id: camunda-fe
+        principle-attr: preferred_username
+
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
