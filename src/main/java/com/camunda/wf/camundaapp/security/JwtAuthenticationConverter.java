@@ -30,11 +30,10 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
 
-        // Extract GrantedAuthoritys from the given Jwt.
+        // Extract GrantedAuthoritys from the given Jwt. (get requested scopes)
         Collection<GrantedAuthority> jwt_authorities = jwtGrantedAuthoritiesConverter.convert(jwt);
 
         Collection<? extends GrantedAuthority> authorities = extractResourceRoles(jwt);
-
 
         // 3rd: principle claim name
         return new JwtAuthenticationToken(jwt, authorities, getPrincipleClaimName(jwt));
@@ -61,8 +60,13 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
         resourceRoles = (Collection<String>) resource.get("roles");
 
         // extract role and add "ROLE_" prefix to each role
-        return resourceRoles.stream().map(role-> new SimpleGrantedAuthority("ROLE_"+role))
-                .collect(Collectors.toSet());
+        return resourceRoles.stream().map(role-> {
+                if(!role.startsWith("ROLE_")){
+                    role="ROLE_"+role;
+                }
+                return new SimpleGrantedAuthority(role);
+            })
+            .collect(Collectors.toSet());
     }
 
     private String getPrincipleClaimName(Jwt jwt){

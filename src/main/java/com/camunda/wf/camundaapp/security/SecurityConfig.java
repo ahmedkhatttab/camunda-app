@@ -15,10 +15,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final String[] allowedUris = {"/camunda/**"};
     private final JwtAuthenticationConverter jwtAuthenticationConverter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests().antMatchers(allowedUris).permitAll();
 
         http.authorizeHttpRequests((request) -> request.anyRequest().authenticated());
 

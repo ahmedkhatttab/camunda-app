@@ -38,7 +38,7 @@ public class ProcessRequestController {
 
     @PostMapping
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('TEST')")
     public ResponseEntity<String> createRequest(@RequestBody @Valid OrderRequest request){
 
         String processDefKey = "request_process";

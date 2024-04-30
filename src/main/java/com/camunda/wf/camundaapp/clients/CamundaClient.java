@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,18 +38,21 @@ public class CamundaClient {
     }
 
     public TaskDto getTaskByProcessInstanceId(String processInstanceId){
+        HttpEntity requestEntity = new HttpEntity(null, getHttpHeaders());
+
         ResponseEntity<List<TaskDto>> taskList =
                 restTemplate.exchange(camundaBaseUrl + "/task?processInstanceId={processInstanceId}",
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskDto>>() {
+                HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<TaskDto>>() {
                 }, processInstanceId);
 
         return taskList.getBody().get(0);
     }
 
     public TaskDto getTaskByBusinessKey(String businessKey){
+        HttpEntity requestEntity = new HttpEntity(null, getHttpHeaders());
         ResponseEntity<List<TaskDto>> taskList =
                 restTemplate.exchange(camundaBaseUrl + "/task?processInstanceBusinessKey={businessKey}",
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskDto>>() {
+                        HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<TaskDto>>() {
                         }, businessKey);
 
         return taskList.getBody().get(0);
@@ -64,6 +69,14 @@ public class CamundaClient {
     private HttpHeaders getHttpHeaders(){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        Object auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth!=null){
+            if(auth instanceof JwtAuthenticationToken){
+                headers.add(HttpHeaders.AUTHORIZATION,
+                        "Bearer "+((JwtAuthenticationToken)auth).getToken().getTokenValue());
+            }
+        }
+
         return headers;
     }
 }
